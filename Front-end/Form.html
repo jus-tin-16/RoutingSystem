@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Routing System</title>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="Form.css"> 
+    </head>
+    <body>
+        <container>
+        <div class="pane">
+            <div class="form-container">
+                <div class="select-container">
+                    <div id="btn"></div>
+                    <button type="button" class="toggle-btn" onclick="login()">Default</button>
+                    <button type="button" class="toggle-btn" onclick="register()">Default</button>
+                </div>
+                <form>
+                    <div id="login" class="input-group">
+                        <input id="userid" type="userId" class="form-control" name="userId" placeholder="User Id">
+                        <input id="password" type="password" class="form-control" name="password" placeholder="Password">
+                        <label><input type="checkbox" value="">Remember me</label>
+                        <button type="submit" class="btn-submit">Submit</button>
+                    </div>
+                </form>
+                <form>
+                    <div id="register" class="input-group">
+                        <input id="email" type="email" class="form-control" name="email" placeholder="Email">
+                        <input id="lname" type="lastName" class="form-control" name="userFirstName" placeholder="Email">
+                        <input id="fname" type="firstName" class="form-control" name="userLastName" placeholder="Email">
+                        <input id="minitial" type="midInitial" class="form-control" name="userMInitial" placeholder="Email">
+                        <input id="password" type="password" class="form-control" name="password" placeholder="Password">
+                        <label><input type="checkbox" value="">I agree to the Terms & Conditions</label>
+                        <button type="submit" class="btn-submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </container>
+
+    <script>
+        var x = document.getElementById("login");
+        var y = document.getElementById("register");
+        var z = document.getElementById("btn");
+
+        function register(){
+            x.style.left = "-400px";
+            y.style.left = "50px";
+            z.style.left = "110px";
+        }
+
+        function login(){
+            x.style.left = "50px";
+            y.style.left = "450px";
+            z.style.left = "0px";
+        }
+    </script>
+    </body>
+</html>
