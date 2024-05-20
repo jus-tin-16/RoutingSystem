@@ -20,23 +20,32 @@
             <div class="form-container">
                 <div class="select-container">
                     <div id="btn"></div>
-                    <button type="button" class="toggle-btn" onclick="login()">Default</button>
-                    <button type="button" class="toggle-btn" onclick="register()">Default</button>
+                    <button type="button" class="toggle-btn" onclick="login()">Login</button>
+                    <button type="button" class="toggle-btn" onclick="register()">Sign-Up</button>
                 </div>
                 <form>
                     <div id="login" class="input-group">
-                        <input id="email" type="email" class="form-control" name="email" placeholder="Email">
+                        <div>
+                            <label for="user" class="radio-inline""><input type="radio" name="account" id="user">General User</label>
+                            <label for="admin" class="radio-inline""><input type="radio" name="account" id="admin">Admin</label>
+                        </div>
+                        <input id="username" type="userN" class="form-control" name="userName" placeholder="Username">
                         <input id="password" type="password" class="form-control" name="password" placeholder="Password">
                         <label><input type="checkbox" value="">Remember me</label>
                         <button type="submit" class="btn-submit">Submit</button>
                     </div>
                 </form>
-                <form>
+                <form action="register.php" method="post">
                     <div id="register" class="input-group">
+                        <div>
+                            <label for="user" class="radio-inline""><input type="radio" name="account" id="user">General User</label>
+                            <label for="admin" class="radio-inline""><input type="radio" name="account" id="admin">Admin</label>
+                        </div>
                         <input id="email" type="email" class="form-control" name="email" placeholder="Email">
-                        <input id="lname" type="lastName" class="form-control" name="userFirstName" placeholder="Email">
-                        <input id="fname" type="firstName" class="form-control" name="userLastName" placeholder="Email">
-                        <input id="minitial" type="midInitial" class="form-control" name="userMInitial" placeholder="Email">
+                        <input id="lname" type="lastName" class="form-control" name="userLastName" placeholder="Last Name">
+                        <input id="fname" type="firstName" class="form-control" name="userFirstName" placeholder="First Name">
+                        <input id="minitial" type="midInitial" class="form-control" name="userMInitial" placeholder="Middle initial">
+                        <input id="username" type="userN" class="form-control" name="userName" placeholder="Username">
                         <input id="password" type="password" class="form-control" name="password" placeholder="Password">
                         <label><input type="checkbox" value="">I agree to the Terms & Conditions</label>
                         <button type="submit" class="btn-submit">Submit</button>

@@ -21,6 +21,7 @@
     background-color: #fff;
     padding: 5px;
     overflow: hidden;
+    border-radius: 15px;
 }
 
 .select-container {
@@ -38,6 +39,11 @@
     border: 0;
     outline: none;
     position: relative;
+    text-align: center;
+}
+
+.toggle-btn:active{
+    color: white;
 }
 
 #btn {
@@ -52,13 +58,13 @@
 }
 
 .input-group{
-    top: 150px;
+    top: 100px;
     position: absolute;
     width: 280px;
     transition: .5s;
 }
 
-input[type="email"], input[type="password"], input[type="firstName"], input[type="lastName"], input[type="midInitial"] {
+input[type="email"], input[type="userN"], input[type="password"], input[type="firstName"], input[type="lastName"], input[type="midInitial"] {
     width: 100%;
     padding: 10px 0;
     margin: 5px 0;
