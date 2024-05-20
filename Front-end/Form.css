@@ -58,7 +58,7 @@
     transition: .5s;
 }
 
-input[type="email"], input[type="userId"], input[type="password"], input[type="firstName"], input[type="lastName"], input[type="midInitial"] {
+input[type="email"], input[type="password"], input[type="firstName"], input[type="lastName"], input[type="midInitial"] {
     width: 100%;
     padding: 10px 0;
     margin: 5px 0;
