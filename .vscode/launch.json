@@ -6,10 +6,10 @@
     "configurations": [
 
         {
-            "type": "chrome",
+            "type": "msedge",
             "request": "launch",
             "name": "Open userDashboard.html",
-            "file": "C:\\xampp\\htdocs\\RoutingSystem\\Front-end\\userDashboard.html"
+            "file": "C:\\xampp\\htdocs\\RoutingSystem\\userDashboard.html"
         }
     ]
 }
