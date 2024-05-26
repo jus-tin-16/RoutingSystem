@@ -133,6 +133,14 @@ h4 {
     margin-right: 12px;
 }
 
+#report-subject {
+    background-color: #ebebeb;
+}
+
+#report-body {
+    background-color: #ebebeb;
+}
+
 .mb-3{
     padding-top: 10px;
 }

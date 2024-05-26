@@ -1,3 +1,38 @@
+<?php
+    require_once 'connect_db.php';
+?>
+
+<?php
+
+    if(!empty($_SESSION['id'])){
+        $id = $_SESSION['id'];
+        $sql = $conn->prepare("SELECT * FROM userinfo WHERE userId = ?");
+        $sql->bind_param("i", $id);
+        $sql->execute();
+        $result = $sql->get_result();
+        $data = $result->fetch_assoc();
+        $_SESSION['user'] = $data['userMail'];
+    }   
+
+    if (isset($_POST['submit-report'])){
+        $reportTitle = $_POST['reportTitle'];
+        $reportContext =  $_POST['reportContext'];
+    
+                                
+        $sql = "INSERT INTO report(repSubject, content) VALUES(?,?)";
+        $stmtinsert = $conn->prepare($sql);
+        $result = $stmtinsert->execute([$reportTitle, $reportContext]);
+            
+        if ($result === TRUE){
+            echo "Success";
+        } else {
+             echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+            
+    }
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -20,7 +55,9 @@
                 </div>
                 <ul class="sidebar-nav">
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link"><i class="lni lni-user"></i><span>Profile</span></a>
+                        <a href="#" class="sidebar-link"><i class="lni lni-user"></i><span>
+                            <?php echo $_SESSION['user']; ?>
+                            </span></a>
                     </li>
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link"><i class="lni lni-write"></i><span>Send Report</span></a>
@@ -37,15 +74,15 @@
                 </div>
                 <div class="form-container">
                     <h4>New Report</h4>
-                    <form>
+                    <form action="userDashboard.php" method="POST">
                         <div id="report-form">
                             <div class="input-group">
                                 <span><label for="report-subject" class="form-label">Subject: </label></span>
-                                <input type="title" class="form-control" id="report-subject" placeholder="Subject">
+                                <input type="title" class="form-control" id="report-subject" name="reportTitle" placeholder="Subject">
                             </div>
                             <div class="mb-3">
                                 <span><label for="report-body" class="form-label">Compose report: </label></span>
-                                <textarea class="form-control" id="report-body" rows="5" placeholder="Message"></textarea>
+                                <textarea class="form-control" id="report-body" rows="5" name="reportContext" placeholder="Message"></textarea>
                             </div>
                             <div class="row">
                                 <div class="col-sm-8">

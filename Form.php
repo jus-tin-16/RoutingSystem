@@ -1,5 +1,5 @@
 <?php
-    require_once 'connect_db.php'
+    require_once 'connect_db.php';
 ?>
 
 <?php
@@ -47,8 +47,8 @@
         if ($result->num_rows > 0){
             $data = $result->fetch_assoc();
             if ($data['userPass'] === $password){
-                    echo "Success";
-                    header('Location: userDashboard.html');
+                    $_SESSION['id'] = $data['userId'];
+                    header('Location: userDashboard.php');
             }
         }
     } 

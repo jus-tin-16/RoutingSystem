@@ -9,7 +9,7 @@
             "type": "msedge",
             "request": "launch",
             "name": "Open userDashboard.html",
-            "file": "C:\\xampp\\htdocs\\RoutingSystem\\userDashboard.html"
+            "file": "C:\\xampp\\htdocs\\RoutingSystem\\adminDashboard.html"
         }
     ]
 }
