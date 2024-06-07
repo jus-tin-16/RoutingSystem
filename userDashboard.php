@@ -1,9 +1,8 @@
 <?php
-    require_once 'connect_db.php';
+    require_once 'connect_db.php'
 ?>
 
 <?php
-
     if(!empty($_SESSION['id'])){
         $id = $_SESSION['id'];
         $sql = $conn->prepare("SELECT * FROM userinfo WHERE userId = ?");
@@ -34,7 +33,7 @@
             $sql = "INSERT INTO tasks(status, reportNo) VALUES(?, ?)";
             $stmtinsert = $conn->prepare($sql);
             $result = $stmtinsert->execute([$Status, $report]);
-            
+            $_SESSION['taskId'] = $report;
             if ($result === TRUE){
                 echo "Success";
             }

@@ -3,12 +3,19 @@
 ?>
 
 <?php
-    $conn = new mysqli("localhost", "root", "", "mydb");
-    if (!$conn){
-        die('Connection Failed : ' .mysql_error());
+    $sql = "SELECT repSubject FROM report";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0){
+        $row = $result->fetch_assoc();
+        $_SESSION['title'] = $row['repSubject'];
+        
     }
 
     if(!empty($_SESSION['id'])){
+        $conn = new mysqli("localhost", "root", "", "mydb");
+        if (!$conn){
+            die('Connection Failed : ' .mysql_error());
+        }
         $id = $_SESSION['id'];
         $sql = $conn->prepare("SELECT * FROM managerinfo WHERE adminId = ?");
         $sql->bind_param("i", $id);
@@ -17,6 +24,7 @@
         $data = $result->fetch_assoc();
         $_SESSION['user'] = $data['adminMail'];
     }
+
 ?>
 
 <!DOCTYPE html>
@@ -53,7 +61,7 @@
                     </li>
                 </ul>
                 <div class="sidebar-footer">
-                    <a href="#" class="sidebar-link"><i class="lni lni-exit"></i><span>Logout</span></a>
+                    <a href="logout.php" class="sidebar-link"><i class="lni lni-exit"></i><span>Logout</span></a>
                 </div>
             </aside>
             <div class="main p-3">
@@ -73,7 +81,7 @@
                                     <div class="card" aria-hidden="true">
                                         <div class="card-header" style="display: flex; align-content: center;">
                                             <h5 class="card-title">
-                                                <span>Task 1</span>
+                                                <span><?php echo $_SESSION['title']; ?></span>
                                             </h5>
                                             <div class="card-tools">
                                                 <button class="btn" style="background-color: transparet; border: none;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">
