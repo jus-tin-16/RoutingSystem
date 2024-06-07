@@ -3,13 +3,8 @@
 ?>
 
 <?php
-    $sql = "SELECT repSubject FROM report";
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0){
-        $row = $result->fetch_assoc();
-        $_SESSION['title'] = $row['repSubject'];
-        
-    }
+    $sql = "SELECT * FROM report";
+    $all_report= $conn->query($sql);
 
     if(!empty($_SESSION['id'])){
         $conn = new mysqli("localhost", "root", "", "mydb");
@@ -39,7 +34,7 @@
         <link rel="stylesheet" href="userDashboard.css">
     </head>
     <body>
-         <div class="wrapper">
+        <div class="wrapper">
             <aside id="sidebar">
                 <div class="d-flex">
                     <button class="toggle-button" type="button"><i class="lni lni-grid-alt"></i></button>
@@ -78,10 +73,14 @@
                             </div>
                             <div class="kanban-item" style="margin-left: 30px; margin-right: 30px; padding-bottom: 15px;">
                                 <div class="vstack gap-2">
-                                    <div class="card" aria-hidden="true">
+                                    <?php
+                                             if ($all_report->num_rows > 0) {
+                                                while ($row = $all_report->fetch_assoc()) {
+                                    ?>
+                                    <div class="card" aria-hidden="true" >
                                         <div class="card-header" style="display: flex; align-content: center;">
                                             <h5 class="card-title">
-                                                <span><?php echo $_SESSION['title']; ?></span>
+                                                <span><?php echo $row['repSubject']; ?></span>
                                             </h5>
                                             <div class="card-tools">
                                                 <button class="btn" style="background-color: transparet; border: none;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">
@@ -99,16 +98,18 @@
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                        <p class="card-text placeholder-glow">
-                                            <span class="placeholder col-7"></span>
-                                            <span class="placeholder col-4"></span>
-                                            <span class="placeholder col-4"></span>
-                                            <span class="placeholder col-6"></span>
-                                            <span class="placeholder col-8"></span>
-                                        </p>
-                                        <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-6"></a>
+                                            <p class="card-text">
+                                                <?php 
+                                                        echo $row['content'];
+                                                ?>
+                                            </p>
+                                            <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-6"></a>
                                         </div>
                                     </div>
+                                    <?php
+                                            }
+                                        }
+                                    ?>
                                 </div>
                             </div>
                         </div>
