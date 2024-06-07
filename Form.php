@@ -11,27 +11,59 @@
         $userName = mysqli_real_escape_string($conn, $_POST['userName']);
         $password = mysqli_real_escape_string($conn, $_POST['password']);
 
-        $sql = "SELECT * from useraccount where userName='$userName'";
-        $result = $conn->query($sql);
-        $count_user = mysqli_num_rows($result);
+        if (isset($_POST['genAccount'])){
+            $sql = "SELECT * from useraccount where userName='$userName'";
+            $result = $conn->query($sql);
+            $count_user = mysqli_num_rows($result);
 
-        $sql = "SELECT * from userinfo where userMail='$email'";
-        $result = $conn->query($sql);
-        $count_email = mysqli_num_rows($result);
-                                
-        if ($count_user == 0 || $count_email == 0){
-            $sql = "INSERT INTO useraccount(userName, userPass) VALUES(?,?)";
-            $stmtinsert = $conn->prepare($sql);
-            $result = $stmtinsert->execute([$userName, $password]);
-            $user_id = mysqli_insert_id ($conn);
-            if ($result){
-                echo "Success";
+            $sql = "SELECT * from userinfo where userMail='$email'";
+            $result = $conn->query($sql);
+            $count_email = mysqli_num_rows($result);
+                                    
+            if ($count_user == 0 || $count_email == 0){
+                $sql = "INSERT INTO useraccount(userName, userPass) VALUES(?,?)";
+                $stmtinsert = $conn->prepare($sql);
+                $result = $stmtinsert->execute([$userName, $password]);
+                $user_id = mysqli_insert_id ($conn);
+                if ($result){
+                    echo "Success";
+                }
+                $sql = "INSERT INTO userinfo(userMail, FirstName, LastName, MiddleInitial, userId) VALUES(?,?,?,?,?)";
+                $stmtinsert = $conn->prepare($sql);
+                $result = $stmtinsert->execute([$email, $userFirstName, $userLastName, $userMInitial, $user_id]);
+                if ($result){
+                    echo "Success";
+                }
             }
-            $sql = "INSERT INTO userinfo(userMail, FirstName, LastName, MiddleInitial, userId) VALUES(?,?,?,?,?)";
-            $stmtinsert = $conn->prepare($sql);
-            $result = $stmtinsert->execute([$email, $userFirstName, $userLastName, $userMInitial, $user_id]);
-            if ($result){
-                echo "Success";
+        }
+
+        if (isset($_POST['adAccount'])){
+            $conn = new mysqli("localhost", "root", "", "mydb");
+            if (!$conn){
+                die('Connection Failed : ' .mysql_error());
+            }
+            $sql = "SELECT * from managementaccount where adminName='$userName'";
+            $result = $conn->query($sql);
+            $count_user = mysqli_num_rows($result);
+
+            $sql = "SELECT * from managerinfo where adminMail='$email'";
+            $result = $conn->query($sql);
+            $count_email = mysqli_num_rows($result);
+                                    
+            if ($count_user == 0 || $count_email == 0){
+                $sql = "INSERT INTO managementaccount(adminName, adminPass) VALUES(?,?)";
+                $stmtinsert = $conn->prepare($sql);
+                $result = $stmtinsert->execute([$userName, $password]);
+                $user_id = mysqli_insert_id ($conn);
+                if ($result){
+                    echo "Success";
+                }
+                $sql = "INSERT INTO managerinfo(adminMail, adminFName, adminLName, adminMInitial, adminId) VALUES(?,?,?,?,?)";
+                $stmtinsert = $conn->prepare($sql);
+                $result = $stmtinsert->execute([$email, $userFirstName, $userLastName, $userMInitial, $user_id]);
+                if ($result){
+                    echo "Success";
+                }
             }
         }
     }
@@ -40,15 +72,35 @@
         $userName = mysqli_real_escape_string($conn, $_POST['userName']);
         $password = mysqli_real_escape_string($conn, $_POST['password']);
 
-        $sql = $conn->prepare("SELECT * FROM useraccount WHERE userName = ?");
-        $sql->bind_param("s", $userName);
-        $sql->execute();
-        $result = $sql->get_result();
-        if ($result->num_rows > 0){
-            $data = $result->fetch_assoc();
-            if ($data['userPass'] === $password){
-                    $_SESSION['id'] = $data['userId'];
-                    header('Location: userDashboard.php');
+        if (isset($_POST['genAccount'])){
+            $sql = $conn->prepare("SELECT * FROM useraccount WHERE userName = ?");
+            $sql->bind_param("s", $userName);
+            $sql->execute();
+            $result = $sql->get_result();
+            if ($result->num_rows > 0){
+                $data = $result->fetch_assoc();
+                if ($data['userPass'] === $password){
+                        $_SESSION['id'] = $data['userId'];
+                        header('Location: userDashboard.php');
+                }
+            }
+        }
+
+        if (isset($_POST['adAccount'])){
+            $conn = new mysqli("localhost", "root", "", "mydb");
+            if (!$conn){
+                die('Connection Failed : ' .mysql_error());
+            }
+            $sql = $conn->prepare("SELECT * FROM managementaccount WHERE adminName = ?");
+            $sql->bind_param("s", $userName);
+            $sql->execute();
+            $result = $sql->get_result();
+            if ($result->num_rows > 0){
+                $data = $result->fetch_assoc();
+                if ($data['adminPass'] === $password){
+                        $_SESSION['id'] = $data['adminId'];
+                        header('Location: adminDashboard.php');
+                }
             }
         }
     } 
@@ -82,8 +134,8 @@
                 <form action="Form.php" method="post">
                     <div id="login" class="input-group">
                         <div>
-                            <label for="user" class="radio-inline""><input type="radio" name="account" id="user">General User</label>
-                            <label for="admin" class="radio-inline""><input type="radio" name="account" id="admin">Admin</label>
+                            <label for="user" class="radio-inline""><input type="radio" name="genAccount" id="user">General User</label>
+                            <label for="admin" class="radio-inline""><input type="radio" name="adAccount" id="admin">Admin</label>
                         </div>
                         <input id="username" type="userN" class="form-control" name="userName" placeholder="Username">
                         <input id="password" type="password" class="form-control" name="password" placeholder="Password">
@@ -94,8 +146,8 @@
                 <form action="Form.php" method="post">
                     <div id="register" class="input-group">
                         <div>
-                            <label for="user" class="radio-inline""><input type="radio" name="account" id="user">General User</label>
-                            <label for="admin" class="radio-inline""><input type="radio" name="account" id="admin">Admin</label>
+                            <label for="user" class="radio-inline""><input type="radio" name="genAccount" id="user">General User</label>
+                            <label for="admin" class="radio-inline""><input type="radio" name="adAccount" id="admin">Admin</label>
                         </div>
                         <input id="email" type="email" class="form-control" name="email" placeholder="Email">
                         <input id="lname" type="lastName" class="form-control" name="userLastName" placeholder="Last Name">

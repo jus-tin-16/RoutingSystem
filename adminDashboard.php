@@ -1,3 +1,24 @@
+<?php
+    require_once 'connect_db.php';
+?>
+
+<?php
+    $conn = new mysqli("localhost", "root", "", "mydb");
+    if (!$conn){
+        die('Connection Failed : ' .mysql_error());
+    }
+
+    if(!empty($_SESSION['id'])){
+        $id = $_SESSION['id'];
+        $sql = $conn->prepare("SELECT * FROM managerinfo WHERE adminId = ?");
+        $sql->bind_param("i", $id);
+        $sql->execute();
+        $result = $sql->get_result();
+        $data = $result->fetch_assoc();
+        $_SESSION['user'] = $data['adminMail'];
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -20,7 +41,9 @@
                 </div>
                 <ul class="sidebar-nav">
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link"><i class="lni lni-user"></i><span>Profile</span></a>
+                        <a href="#" class="sidebar-link"><i class="lni lni-user"></i><span>
+                        <?php echo $_SESSION['user']; ?>
+                        </span></a>
                     </li>
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link"><i class="lni lni-display"></i><span>Dashboard</span></a>

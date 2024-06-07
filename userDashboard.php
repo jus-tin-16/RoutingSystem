@@ -17,14 +17,27 @@
     if (isset($_POST['submit-report'])){
         $reportTitle = $_POST['reportTitle'];
         $reportContext =  $_POST['reportContext'];
+        $Status = $_POST['submit-report'];
     
                                 
         $sql = "INSERT INTO report(repSubject, content) VALUES(?,?)";
         $stmtinsert = $conn->prepare($sql);
         $result = $stmtinsert->execute([$reportTitle, $reportContext]);
-            
+        $report = mysqli_insert_id ($conn);
+
         if ($result === TRUE){
             echo "Success";
+            $conn = new mysqli("localhost", "root", "", "mydb");
+            if (!$conn){
+                die('Connection Failed : ' .mysql_error());
+            }
+            $sql = "INSERT INTO tasks(status, reportNo) VALUES(?, ?)";
+            $stmtinsert = $conn->prepare($sql);
+            $result = $stmtinsert->execute([$Status, $report]);
+            
+            if ($result === TRUE){
+                echo "Success";
+            }
         } else {
              echo "Error: " . $sql . "<br>" . $conn->error;
         }
@@ -60,11 +73,11 @@
                             </span></a>
                     </li>
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link"><i class="lni lni-write"></i><span>Send Report</span></a>
+                        <a href="userDashboard.php" class="sidebar-link"><i class="lni lni-write"></i><span>Send Report</span></a>
                     </li>
                 </ul>
                 <div class="sidebar-footer">
-                    <a href="#" class="sidebar-link"><i class="lni lni-exit"></i><span>Logout</span></a>
+                    <a href="logout.php" class="sidebar-link"><i class="lni lni-exit"></i><span>Logout</span></a>
                 </div>
             </aside>
             <div class="main p-3">
@@ -86,7 +99,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-8">
-                                    <button type="submit" class="btn-submit" name="submit-report">Submit</button>
+                                    <button type="submit" class="btn-submit" name="submit-report" value="new">Submit</button>
                                 </div>
                                 <div class="col-sm-1">
                                     <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Attach Document" data-bs-placement="bottom">
@@ -105,7 +118,7 @@
                                 </div>
                                 <div class="col-sm-1">
                                     <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Attach Signature" data-bs-placement="bottom">
-                                        <button type="signature" class="btn-tool" name="signt"><i class="lni lni-pencil"></i></i></button>
+                                        <button type="signature" class="btn-tool" name="sign"><i class="lni lni-pencil"></i></i></button>
                                     </span>
                                 </div>
                             </div>
