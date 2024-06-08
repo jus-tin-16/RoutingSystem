@@ -172,8 +172,8 @@
                                             <?php echo $row['content']; ?>
                                             </p>
                                             <div class="btn-group">
-                                                <a href="#" tabindex="-1" class="btn btn-primary" name="complete">Mark as complete</a>
-                                                <a href="#" tabindex="-1" class="btn btn-secondary disabled" name="progress">In-progress-></a>
+                                                <a href="#"  class="btn btn-primary" name="complete">Mark as complete</a>
+                                                <a href="#"  class="btn btn-secondary disabled" name="progress">In-progress-></a>
                                             </div>
                                         </div>
                                     </div>
