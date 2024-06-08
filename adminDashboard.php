@@ -6,6 +6,9 @@
     $sql = "SELECT * FROM report";
     $all_report= $conn->query($sql);
 
+    $sql2 = "SELECT * FROM report";
+    $all_report2 = $conn->query($sql);
+
     if(!empty($_SESSION['id'])){
         $conn = new mysqli("localhost", "root", "", "mydb");
         if (!$conn){
@@ -59,7 +62,7 @@
                     <a href="logout.php" class="sidebar-link"><i class="lni lni-exit"></i><span>Logout</span></a>
                 </div>
             </aside>
-            <div class="main p-3">
+            <div class="main p-3" action="userDashboard.php" method="POST">
                 <div class="header">
                     <p>Management<p>
                     <h2>Report Surveillance</h2>
@@ -76,6 +79,73 @@
                                     <?php
                                              if ($all_report->num_rows > 0) {
                                                 while ($row = $all_report->fetch_assoc()) {
+                                                    $conn = new mysqli("localhost", "root", "", "mydb");
+                                                    $sql = $conn->prepare("SELECT * from tasks WHERE taskNo = ?");
+                                                    $sql->bind_param("i", $row['reportFormNo']);
+                                                    $sql->execute();
+                                                    $result = $sql->get_result();
+                                                    $task = $result->fetch_assoc();
+                                                    $stat = $task['status'];
+                                                    if ($stat === 'new'){
+                                    ?>
+                                    <div class="card" aria-hidden="true" >
+                                        <div class="card-header" style="display: flex; align-content: center;">
+                                            <h5 class="card-title">
+                                                <span><?php echo $row['repSubject']; ?></span>
+                                            </h5>
+                                            <div class="card-tools">
+                                                <button class="btn" style="background-color: transparent; border: none;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">
+                                                    <i class="lni lni-frame-expand"></i>
+                                                </button>
+                                                <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasWithBackdrop" aria-labelledby="offcanvasWithBackdropLabel">
+                                                    <div class="offcanvas-header">
+                                                      <h5 class="offcanvas-title" id="offcanvasWithBackdropLabel">Offcanvas with backdrop</h5>
+                                                      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="offcanvas-body">
+                                                      <p>.....</p>
+                                                    </div>
+                                                  </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="card-text">
+                                                <?php 
+                                                        echo $row['content'];
+                                                ?>
+                                            </p>
+                                            <div class="btn-group">
+                                                <a href="#"  class="btn btn-primary" name="complete" value="completed">Mark as complete</a>
+                                                <a href="#"  class="btn btn-secondary" name="progress" value="inprogress">In-progress-></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                                }
+                                            }
+                                        }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 mx-auto">
+                        <div class="kanban-group" style="background-color: antiquewhite; margin: 15px; height: 480px; overflow: scroll;">
+                            <div class="kanban-head" style="margin: 30px;">
+                                <h5 id="title" style="font-size: 32px;">In-Progress</h5>
+                            </div>
+                            <div class="kanban-item" style="margin-left: 30px; margin-right: 30px; padding-bottom: 15px;">
+                                <div class="vstack gap-2">
+                                    <?php   if ($all_report2 ->num_rows > 0) {
+                                                while ($row = $all_report2->fetch_assoc()) {
+                                                    $conn = new mysqli("localhost", "root", "", "mydb");
+                                                    $sql = $conn->prepare("SELECT * from tasks WHERE taskNo = ?");
+                                                    $sql->bind_param("i", $row['reportFormNo']);
+                                                    $sql->execute();
+                                                    $result = $sql->get_result();
+                                                    $task = $result->fetch_assoc();
+                                                    $stat = $task['status'];
+                                                    if ($stat === 'inprogress'){
                                     ?>
                                     <div class="card" aria-hidden="true" >
                                         <div class="card-header" style="display: flex; align-content: center;">
@@ -99,73 +169,19 @@
                                         </div>
                                         <div class="card-body">
                                             <p class="card-text">
-                                                <?php 
-                                                        echo $row['content'];
-                                                ?>
+                                            <?php echo $row['content']; ?>
                                             </p>
-                                            <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-6"></a>
+                                            <div class="btn-group">
+                                                <a href="#" tabindex="-1" class="btn btn-primary" name="complete">Mark as complete</a>
+                                                <a href="#" tabindex="-1" class="btn btn-secondary disabled" name="progress">In-progress-></a>
+                                            </div>
                                         </div>
                                     </div>
                                     <?php
-                                            }
+                                                }
+                                           }
                                         }
                                     ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 mx-auto">
-                        <div class="kanban-group" style="background-color: antiquewhite; margin: 15px; height: 480px; overflow: scroll;">
-                            <div class="kanban-head" style="margin: 30px;">
-                                <h5 id="title" style="font-size: 32px;">In-Progress</h5>
-                            </div>
-                            <div class="kanban-item" style="margin-left: 30px; margin-right: 30px; padding-bottom: 15px;">
-                                <div class="vstack gap-2">
-                                    <div class="card" aria-hidden="true">
-                                        <div class="card-body">
-                                        <h5 class="card-title placeholder-glow">
-                                            <span class="placeholder col-6"></span>
-                                        </h5>
-                                        <p class="card-text placeholder-glow">
-                                            <span class="placeholder col-7"></span>
-                                            <span class="placeholder col-4"></span>
-                                            <span class="placeholder col-4"></span>
-                                            <span class="placeholder col-6"></span>
-                                            <span class="placeholder col-8"></span>
-                                        </p>
-                                        <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-6"></a>
-                                        </div>
-                                    </div>
-                                    <div class="card" aria-hidden="true">
-                                        <div class="card-body">
-                                        <h5 class="card-title placeholder-glow">
-                                            <span class="placeholder col-6"></span>
-                                        </h5>
-                                        <p class="card-text placeholder-glow">
-                                            <span class="placeholder col-7"></span>
-                                            <span class="placeholder col-4"></span>
-                                            <span class="placeholder col-4"></span>
-                                            <span class="placeholder col-6"></span>
-                                            <span class="placeholder col-8"></span>
-                                        </p>
-                                        <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-6"></a>
-                                        </div>
-                                    </div>
-                                    <div class="card" aria-hidden="true">
-                                        <div class="card-body">
-                                        <h5 class="card-title placeholder-glow">
-                                            <span class="placeholder col-6"></span>
-                                        </h5>
-                                        <p class="card-text placeholder-glow">
-                                            <span class="placeholder col-7"></span>
-                                            <span class="placeholder col-4"></span>
-                                            <span class="placeholder col-4"></span>
-                                            <span class="placeholder col-6"></span>
-                                            <span class="placeholder col-8"></span>
-                                        </p>
-                                        <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-6"></a>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
