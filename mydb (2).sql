@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 03, 2024 at 03:12 PM
+-- Generation Time: Jun 09, 2024 at 05:32 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -33,6 +33,13 @@ CREATE TABLE `managementaccount` (
   `adminPass` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Dumping data for table `managementaccount`
+--
+
+INSERT INTO `managementaccount` (`adminId`, `adminName`, `adminPass`) VALUES
+(1, 'test', '123');
+
 -- --------------------------------------------------------
 
 --
@@ -43,8 +50,16 @@ CREATE TABLE `managerinfo` (
   `adminMail` varchar(50) NOT NULL,
   `adminFName` varchar(50) DEFAULT NULL,
   `adminLName` varchar(50) DEFAULT NULL,
-  `adminMInitial` varchar(50) DEFAULT NULL
+  `adminMInitial` varchar(50) DEFAULT NULL,
+  `adminId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `managerinfo`
+--
+
+INSERT INTO `managerinfo` (`adminMail`, `adminFName`, `adminLName`, `adminMInitial`, `adminId`) VALUES
+('test123@example.com', 'ee', 'tt', 'ssyy', 1);
 
 -- --------------------------------------------------------
 
@@ -55,9 +70,18 @@ CREATE TABLE `managerinfo` (
 CREATE TABLE `tasks` (
   `taskNo` int(11) NOT NULL,
   `crewName` varchar(45) DEFAULT NULL,
-  `status` varchar(50) DEFAULT NULL,
-  `timeFrame` date DEFAULT NULL
+  `status` set('new','inprogress','completed') DEFAULT NULL,
+  `timeFrame` date DEFAULT NULL,
+  `reportNo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `tasks`
+--
+
+INSERT INTO `tasks` (`taskNo`, `crewName`, `status`, `timeFrame`, `reportNo`) VALUES
+(1, NULL, 'completed', NULL, 1),
+(2, NULL, 'inprogress', NULL, 2);
 
 --
 -- Indexes for dumped tables
@@ -73,13 +97,15 @@ ALTER TABLE `managementaccount`
 -- Indexes for table `managerinfo`
 --
 ALTER TABLE `managerinfo`
-  ADD PRIMARY KEY (`adminMail`);
+  ADD PRIMARY KEY (`adminMail`),
+  ADD KEY `adminId` (`adminId`);
 
 --
 -- Indexes for table `tasks`
 --
 ALTER TABLE `tasks`
-  ADD PRIMARY KEY (`taskNo`);
+  ADD PRIMARY KEY (`taskNo`),
+  ADD KEY `reportNo` (`reportNo`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -89,13 +115,35 @@ ALTER TABLE `tasks`
 -- AUTO_INCREMENT for table `managementaccount`
 --
 ALTER TABLE `managementaccount`
-  MODIFY `adminId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `adminId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `managerinfo`
+--
+ALTER TABLE `managerinfo`
+  MODIFY `adminId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `taskNo` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `taskNo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `managerinfo`
+--
+ALTER TABLE `managerinfo`
+  ADD CONSTRAINT `fk_to_adminId` FOREIGN KEY (`adminId`) REFERENCES `managementaccount` (`adminId`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `tasks`
+--
+ALTER TABLE `tasks`
+  ADD CONSTRAINT `fk_to_reportNo` FOREIGN KEY (`reportNo`) REFERENCES `sampledatabase`.`report` (`reportFormNo`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

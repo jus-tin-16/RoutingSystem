@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 03, 2024 at 03:12 PM
+-- Generation Time: Jun 09, 2024 at 05:33 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,7 +41,8 @@ CREATE TABLE `report` (
 --
 
 INSERT INTO `report` (`reportFormNo`, `date`, `repSubject`, `images`, `attach`, `content`) VALUES
-(1, NULL, 'Task 1', NULL, NULL, 'Lorem ipsum dolor');
+(1, NULL, 'Sample', NULL, NULL, 'Marc Niño Christopher'),
+(2, NULL, 'Sample2', NULL, NULL, 'Hello World!');
 
 -- --------------------------------------------------------
 
@@ -61,7 +62,8 @@ CREATE TABLE `useraccount` (
 
 INSERT INTO `useraccount` (`userId`, `userName`, `userPass`) VALUES
 (1, 'justin_a', '12345678'),
-(2, '123', 'aldus');
+(2, '123', 'aldus'),
+(3, 'test', '12345678');
 
 -- --------------------------------------------------------
 
@@ -83,7 +85,8 @@ CREATE TABLE `userinfo` (
 
 INSERT INTO `userinfo` (`userMail`, `LastName`, `FirstName`, `middleInitial`, `userId`) VALUES
 ('123@sample.com', 'Dolor', 'Lorem', 'I', 2),
-('jusitn@gmail.com', 'Aleta', 'Justin Anthony', 'A.', 1);
+('jusitn@gmail.com', 'Aleta', 'Justin Anthony', 'A.', 1),
+('test@example.com', 't', 'es', 't', 3);
 
 --
 -- Indexes for dumped tables
@@ -116,13 +119,13 @@ ALTER TABLE `userinfo`
 -- AUTO_INCREMENT for table `report`
 --
 ALTER TABLE `report`
-  MODIFY `reportFormNo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `reportFormNo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `useraccount`
 --
 ALTER TABLE `useraccount`
-  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
