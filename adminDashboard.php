@@ -115,8 +115,11 @@
                                                 ?>
                                             </p>
                                             <div class="btn-group">
-                                                <a href="#"  class="btn btn-primary" name="complete" value="completed">Mark as complete</a>
-                                                <a href="#"  class="btn btn-secondary" name="progress" value="inprogress">In-progress-></a>
+                                                <form action="update_stat.php" method="post">
+                                                    <?php echo "<input type=hidden name=id value='".$row['reportFormNo']."'>" ?>
+                                                    <button class="btn btn-primary" name="complete" value="completed">Mark as complete</button>
+                                                    <button class="btn btn-secondary" name="progress" value="inprogress">In-progress-></button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -147,7 +150,7 @@
                                                     $stat = $task['status'];
                                                     if ($stat === 'inprogress'){
                                     ?>
-                                    <div class="card" aria-hidden="true" >
+                                    <div class="card" aria-hidden="true">
                                         <div class="card-header" style="display: flex; align-content: center;">
                                             <h5 class="card-title">
                                                 <span><?php echo $row['repSubject']; ?></span>
@@ -172,8 +175,11 @@
                                             <?php echo $row['content']; ?>
                                             </p>
                                             <div class="btn-group">
-                                                <a href="#"  class="btn btn-primary" name="complete">Mark as complete</a>
-                                                <a href="#"  class="btn btn-secondary disabled" name="progress">In-progress-></a>
+                                                <form action="update_stat.php" method="post">
+                                                    <?php echo "<input type=hidden name=id value='".$row['reportFormNo']."'>" ?>
+                                                    <button class="btn btn-primary" name="complete" value="completed">Mark as complete</button>
+                                                    <button class="btn btn-secondary disabled" name="progress" value="inprogress">In-progress-></button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
