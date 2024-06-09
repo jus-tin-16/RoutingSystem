@@ -1,4 +1,5 @@
 <?php
+    //Database connection
     require_once 'connect_db.php';
 ?>
 
@@ -121,11 +122,14 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- CSS Stylesheet of the Login -->
         <link rel="stylesheet" href="Form.css">
     </head>
     <body>
         <container>
         <div class="pane">
+
+            <!-- Creating the Login -->
             <div class="form-container">
                 <div class="select-container">
                     <div id="btn"></div>
@@ -135,8 +139,10 @@
                 <form action="Form.php" method="post">
                     <div id="login" class="input-group">
                         <div>
-                            <label for="user" class="radio-inline""><input type="radio" name="genAccount" id="user">General User</label>
-                            <label for="admin" class="radio-inline""><input type="radio" name="adAccount" id="admin">Admin</label>
+                            <input type="radio" name="user" id="user">
+                            <label for="user">General User</label>
+                            <input type="radio" name="user" id="admin">
+                            <label for="admin">Admin</label>
                         </div>
                         <input id="username" type="userN" class="form-control" name="userName" placeholder="Username">
                         <input id="password" type="password" class="form-control" name="password" placeholder="Password">
@@ -144,11 +150,15 @@
                         <button type="submit" class="btn-submit" name="access" value="Login">Submit</button>
                     </div>
                 </form>
+
+                <!-- Creating the Register -->
                 <form action="Form.php" method="post">
                     <div id="register" class="input-group">
                         <div>
-                            <label for="user" class="radio-inline""><input type="radio" name="genAccount" id="user">General User</label>
-                            <label for="admin" class="radio-inline""><input type="radio" name="adAccount" id="admin">Admin</label>
+                            <input type="radio" name="user" id="user">
+                            <label for="user">General User</label>
+                            <input type="radio" name="user" id="admin">
+                            <label for="admin">Admin</label>
                         </div>
                         <input id="email" type="email" class="form-control" name="email" placeholder="Email">
                         <input id="lname" type="lastName" class="form-control" name="userLastName" placeholder="Last Name">
@@ -164,6 +174,7 @@
         </div>
     </container>
 
+    <!-- Animation of the Button -->
     <script>
         var x = document.getElementById("login");
         var y = document.getElementById("register");
