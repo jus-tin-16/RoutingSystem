@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `report` (
   `reportFormNo` int(11) NOT NULL,
-  `date` date DEFAULT NULL,
+  `date` date NOT NULL DEFAULT CURRENT_DATE,
   `repSubject` text DEFAULT NULL,
   `images` blob DEFAULT NULL,
   `attach` blob DEFAULT NULL,
@@ -41,9 +41,9 @@ CREATE TABLE `report` (
 --
 
 INSERT INTO `report` (`reportFormNo`, `date`, `repSubject`, `images`, `attach`, `content`) VALUES
-(1, NULL, 'Sample', NULL, NULL, 'Marc Niño Christopher'),
-(2, NULL, 'Sample2', NULL, NULL, 'Hello World!'),
-(3, NULL, 'Test Report', NULL, NULL, 'Dear [Venue Manager’s Name],\r\n\r\nI am writing to seek permission to host a conference at [Gymnasium Name] on [Proposed Date(s)]. Our event aims to bring together industry professionals for knowledge sharing and networking. Here are the key details:\r\n\r\nEvent Date: [Date]\r\nTime: [Start Time] to [End Time]\r\nEstimated Attendees: [Number of Attendees]\r\nPurpose: [Brief Description of Conference Topics]\r\nWe commit to paying any applicable fees and ensuring respectful use of the facility. Your consideration is greatly appreciated.\r\n\r\nThank you for your attention. Please feel free to contact me at [Your Phone Number] or [Your Email Address] for further communication.\r\n\r\nSincerely,\r\n\r\n[Your Full Name] [Your Organization/Company]');
+(1, CURRENT_DATE, 'Sample', NULL, NULL, 'Marc Niño Christopher'),
+(2, CURRENT_DATE, 'Sample2', NULL, NULL, 'Hello World!'),
+(3, CURRENT_DATE, 'Test Report', NULL, NULL, 'Dear [Venue Manager's Name],\r\n\r\nI am writing to seek permission to host a conference at [Gymnasium Name] on [Proposed Date(s)]. Our event aims to bring together industry professionals for knowledge sharing and networking. Here are the key details:\r\n\r\nEvent Date: [Date]\r\nTime: [Start Time] to [End Time]\r\nEstimated Attendees: [Number of Attendees]\r\nPurpose: [Brief Description of Conference Topics]\r\nWe commit to paying any applicable fees and ensuring respectful use of the facility. Your consideration is greatly appreciated.\r\n\r\nThank you for your attention. Please feel free to contact me at [Your Phone Number] or [Your Email Address] for further communication.\r\n\r\nSincerely,\r\n\r\n[Your Full Name] [Your Organization/Company]');
 
 -- --------------------------------------------------------
 
