@@ -10,7 +10,7 @@
 
     //opening report table
     $sql2 = "SELECT * FROM report";
-    $all_report2 = $conn->query($sql);
+    $all_report2 = $conn->query($sql2);
 
     //get admin account details
     if(!empty($_SESSION['id'])){
@@ -24,7 +24,11 @@
         $sql->execute();
         $result = $sql->get_result();
         $data = $result->fetch_assoc();
-        $_SESSION['user'] = $data['adminMail'];
+        if ($data) {
+            $_SESSION['user'] = $data['adminMail'];
+        } else {
+            $_SESSION['user'] = "Unknown";
+        }
     }
 
 ?>
@@ -54,7 +58,13 @@
                 <ul class="sidebar-nav">
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link"><i class="lni lni-user"></i><span>
-                        <?php echo $_SESSION['user']; ?>
+                        <?php 
+                            if (isset($_SESSION['user'])) {
+                                echo $_SESSION['user']; 
+                            } else {
+                                echo "Guest";
+                            }
+                        ?>
                         </span></a>
                     </li>
                     <li class="sidebar-item">
@@ -126,10 +136,29 @@
                                                         echo $row['content'];
                                                 ?>
                                             </p>
+                                            <p class="card-text">
+                                                <strong>Date:</strong> <?php echo $row['date']; ?>
+                                            </p>
+                                            <?php if (!empty($row['attachment'])): ?>
+                                            <p class="card-text">
+                                                <strong>Attachment:</strong> <a href="<?php echo $row['attachment']; ?>" target="_blank">View Attachment</a>
+                                            </p>
+                                            <?php endif; ?>
+                                            <?php if (!empty($row['attach'])) { ?>
+                                                <p class="card-text">
+                                                    <strong>Document:</strong> <a href="data:application/octet-stream;base64,<?php echo base64_encode($row['attach']); ?>" download="document">Download</a>
+                                                </p>
+                                            <?php } ?>
+                                            <?php if (!empty($row['images'])) { ?>
+                                                <p class="card-text">
+                                                    <strong>Image:</strong> <img src="data:image/jpeg;base64,<?php echo base64_encode($row['images']); ?>" alt="Report Image" style="max-width: 100%; height: auto;">
+                                                </p>
+                                            <?php } ?>
                                             <div class="btn-group">
                                                 <!-- Updating the status of the report - directs to update_stat.php -->
                                                 <form action="update_stat.php" method="post">
                                                     <?php echo "<input type=hidden name=id value='".$row['reportFormNo']."'>" ?>
+                                                    <?php echo "<input type=hidden name=email value='".$row['userEmail']."'>" // Assuming 'userEmail' is a field in your report table ?>
                                                     <button class="btn btn-primary" name="complete" value="completed">Mark as complete</button>
                                                     <button class="btn btn-secondary" name="progress" value="inprogress">In-progress-></button>
                                                 </form>
@@ -192,10 +221,24 @@
                                             <p class="card-text">
                                             <?php echo $row['content']; ?>
                                             </p>
+                                            <p class="card-text">
+                                                <strong>Date:</strong> <?php echo $row['date']; ?>
+                                            </p>
+                                            <?php if (!empty($row['attach'])) { ?>
+                                                <p class="card-text">
+                                                    <strong>Document:</strong> <a href="data:application/octet-stream;base64,<?php echo base64_encode($row['attach']); ?>" download="document">Download</a>
+                                                </p>
+                                            <?php } ?>
+                                            <?php if (!empty($row['images'])) { ?>
+                                                <p class="card-text">
+                                                    <strong>Image:</strong> <img src="data:image/jpeg;base64,<?php echo base64_encode($row['images']); ?>" alt="Image" style="max-width: 100%; height: auto;">
+                                                </p>
+                                            <?php } ?>
                                             <div class="btn-group">
                                                 <!-- Updating the status of the report - directs to update_stat.php -->
                                                 <form action="update_stat.php" method="post">
                                                     <?php echo "<input type=hidden name=id value='".$row['reportFormNo']."'>" ?>
+                                                    <?php echo "<input type=hidden name=email value='".$row['userEmail']."'>" // Assuming 'userEmail' is a field in your report table ?>
                                                     <button class="btn btn-primary" name="complete" value="completed">Mark as complete</button>
                                                     <button class="btn btn-secondary disabled" name="progress" value="inprogress">In-progress-></button>
                                                 </form>
