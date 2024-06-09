@@ -19,12 +19,25 @@
     if (isset($_POST['submit-report'])){
         $reportTitle = $_POST['reportTitle'];
         $reportContext =  $_POST['reportContext'];
+        $reportDate = $_POST['reportDate'];
         $Status = $_POST['submit-report'];
-    
-                                
-        $sql = "INSERT INTO report(repSubject, content) VALUES(?,?)";
+
+        // Handle file upload for document
+        $reportFile = null;
+        if (isset($_FILES['reportFile']) && $_FILES['reportFile']['error'] == UPLOAD_ERR_OK) {
+            $reportFile = file_get_contents($_FILES['reportFile']['tmp_name']);
+        }
+
+        // Handle file upload for image
+        $reportImage = null;
+        if (isset($_FILES['reportImage']) && $_FILES['reportImage']['error'] == UPLOAD_ERR_OK) {
+            $reportImage = file_get_contents($_FILES['reportImage']['tmp_name']);
+        }
+
+        $sql = "INSERT INTO report(repSubject, content, date, attach, images) VALUES(?, ?, ?, ?, ?)";
         $stmtinsert = $conn->prepare($sql);
-        $result = $stmtinsert->execute([$reportTitle, $reportContext]);
+        $stmtinsert->bind_param("sssss", $reportTitle, $reportContext, $reportDate, $reportFile, $reportImage);
+        $result = $stmtinsert->execute();
         $report = mysqli_insert_id ($conn);
 
         if ($result === TRUE){
@@ -35,7 +48,8 @@
             }
             $sql = "INSERT INTO tasks(status, reportNo) VALUES(?, ?)";
             $stmtinsert = $conn->prepare($sql);
-            $result = $stmtinsert->execute([$Status, $report]);
+            $stmtinsert->bind_param("si", $Status, $report);
+            $result = $stmtinsert->execute();
             $_SESSION['taskId'] = $report;
             if ($result === TRUE){
                 echo "Success";
@@ -95,7 +109,7 @@
                 <!-- The report Form -->
                 <div class="form-container">
                     <h4>New Report</h4>
-                    <form action="userDashboard.php" method="POST">
+                    <form action="userDashboard.php" method="POST" enctype="multipart/form-data">
                         <div id="report-form">
                             <!-- Subject Title text box -->
                             <div class="input-group">
@@ -107,6 +121,21 @@
                                 <span><label for="report-body" class="form-label">Compose report: </label></span>
                                 <textarea class="form-control" id="report-body" rows="5" name="reportContext" placeholder="Message"></textarea>
                             </div>
+                            <!-- Hidden Date input field -->
+                            <div class="mb-3" id="date-input-container" style="display: none;">
+                                <span><label for="report-date" class="form-label">Date: </label></span>
+                                <input type="date" class="form-control" id="report-date" name="reportDate">
+                            </div>
+                            <!-- Hidden File input field for documents -->
+                            <div class="mb-3" id="file-input-container" style="display: none;">
+                                <span><label for="report-file" class="form-label">Attach Document: </label></span>
+                                <input type="file" class="form-control" id="report-file" name="reportFile">
+                            </div>
+                            <!-- Hidden File input field for images -->
+                            <div class="mb-3" id="image-input-container" style="display: none;">
+                                <span><label for="report-image" class="form-label">Attach Image: </label></span>
+                                <input type="file" class="form-control" id="report-image" name="reportImage">
+                            </div>
                             <div class="row">
                                 <!-- Submit Button -->
                                 <div class="col-sm-8">
@@ -115,25 +144,25 @@
                                 <div class="col-sm-1">
                                     <!-- Attach Document Button -->
                                     <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Attach Document" data-bs-placement="bottom">
-                                        <button type="attach" class="btn-tool" name="attach-doc"><i class="lni lni-paperclip"></i></button>
+                                        <button type="button" class="btn-tool" name="attach-doc" onclick="showFileInput()"><i class="lni lni-paperclip"></i></button>
                                     </span>
                                 </div>
                                 <div class="col-sm-1">
                                     <!-- Attach Image Button -->
                                     <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Attach Image" data-bs-placement="bottom">
-                                        <button type="attach" class="btn-tool" name="attach-img"><i class="lni lni-image"></i></button>
+                                        <button type="button" class="btn-tool" name="attach-img" onclick="showImageInput()"><i class="lni lni-image"></i></button>
                                     </span>
                                 </div>
                                 <div class="col-sm-1">
                                     <!-- Set Date Button -->
                                     <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Set Date & Time" data-bs-placement="bottom">
-                                        <button type="date" class="btn-tool" name="calendar"><i class="lni lni-calendar"></i></button>
+                                        <button type="button" class="btn-tool" name="calendar" onclick="showDateInput()"><i class="lni lni-calendar"></i></button>
                                     </span>
                                 </div>
                                 <div class="col-sm-1">
                                     <!-- Attach Signature Button -->
                                     <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Attach Signature" data-bs-placement="bottom">
-                                        <button type="signature" class="btn-tool" name="sign"><i class="lni lni-pencil"></i></i></button>
+                                        <button type="button" class="btn-tool" name="sign"><i class="lni lni-pencil"></i></button>
                                     </span>
                                 </div>
                             </div>
@@ -142,6 +171,10 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Add hidden file inputs -->
+        <input type="file" id="attach-doc-input" style="display: none;">
+        <input type="file" id="attach-img-input" style="display: none;">
         
         <!-- Script for sidebar animation -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -154,6 +187,18 @@
 
             const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
             const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
+            function showDateInput() {
+                document.getElementById('date-input-container').style.display = 'block';
+            }
+
+            function showFileInput() {
+                document.getElementById('file-input-container').style.display = 'block';
+            }
+
+            function showImageInput() {
+                document.getElementById('image-input-container').style.display = 'block';
+            }
          </script>
     </body>
 </html>

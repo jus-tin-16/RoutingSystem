@@ -26,14 +26,16 @@
             if ($count_user == 0 || $count_email == 0){
                 $sql = "INSERT INTO useraccount(userName, userPass) VALUES(?,?)";
                 $stmtinsert = $conn->prepare($sql);
-                $result = $stmtinsert->execute([$userName, $password]);
-                $user_id = mysqli_insert_id ($conn);
+                $stmtinsert->bind_param("ss", $userName, $password);
+                $result = $stmtinsert->execute();
+                $user_id = mysqli_insert_id($conn);
                 if ($result){
                     echo "Success";
                 }
                 $sql = "INSERT INTO userinfo(userMail, FirstName, LastName, MiddleInitial, userId) VALUES(?,?,?,?,?)";
                 $stmtinsert = $conn->prepare($sql);
-                $result = $stmtinsert->execute([$email, $userFirstName, $userLastName, $userMInitial, $user_id]);
+                $stmtinsert->bind_param("ssssi", $email, $userFirstName, $userLastName, $userMInitial, $user_id);
+                $result = $stmtinsert->execute();
                 if ($result){
                     echo "Success";
                 }
@@ -57,14 +59,16 @@
             if ($count_user == 0 || $count_email == 0){
                 $sql = "INSERT INTO managementaccount(adminName, adminPass) VALUES(?,?)";
                 $stmtinsert = $conn->prepare($sql);
-                $result = $stmtinsert->execute([$userName, $password]);
+                $stmtinsert->bind_param("ss", $userName, $password);
+                $result = $stmtinsert->execute();
                 $user_id = mysqli_insert_id ($conn);
                 if ($result){
                     echo "Success";
                 }
                 $sql = "INSERT INTO managerinfo(adminMail, adminFName, adminLName, adminMInitial, adminId) VALUES(?,?,?,?,?)";
                 $stmtinsert = $conn->prepare($sql);
-                $result = $stmtinsert->execute([$email, $userFirstName, $userLastName, $userMInitial, $user_id]);
+                $stmtinsert->bind_param("ssssi", $email, $userFirstName, $userLastName, $userMInitial, $user_id);
+                $result = $stmtinsert->execute();
                 if ($result){
                     echo "Success";
                 }
@@ -159,7 +163,7 @@
                 <form action="Form.php" method="post">
                     <div id="register" class="input-group">
                         <div>
-                            <input type="radio" name="genAccout" id="user">
+                            <input type="radio" name="genAccount" id="user">
                             <label for="user">General User</label>
                             <input type="radio" name="adAccount" id="admin">
                             <label for="admin">Admin</label>
