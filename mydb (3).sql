@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2024 at 05:32 AM
+-- Generation Time: Jun 09, 2024 at 03:00 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -81,7 +81,8 @@ CREATE TABLE `tasks` (
 
 INSERT INTO `tasks` (`taskNo`, `crewName`, `status`, `timeFrame`, `reportNo`) VALUES
 (1, NULL, 'completed', NULL, 1),
-(2, NULL, 'inprogress', NULL, 2);
+(2, NULL, 'inprogress', NULL, 2),
+(3, NULL, 'completed', NULL, 3);
 
 --
 -- Indexes for dumped tables
@@ -127,7 +128,7 @@ ALTER TABLE `managerinfo`
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `taskNo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `taskNo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables

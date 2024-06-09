@@ -1,4 +1,5 @@
 <?php
+    //starting to connect with the database in phpmyadmin
     session_start();
     $servername = "localhost";
     $username = "root";

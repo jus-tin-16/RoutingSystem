@@ -1,14 +1,18 @@
 <?php
+    //connection to the database
     require_once 'connect_db.php';
 ?>
 
 <?php
+    //opening the report table
     $sql = "SELECT * FROM report";
     $all_report= $conn->query($sql);
 
+    //opening report table
     $sql2 = "SELECT * FROM report";
     $all_report2 = $conn->query($sql);
 
+    //get admin account details
     if(!empty($_SESSION['id'])){
         $conn = new mysqli("localhost", "root", "", "mydb");
         if (!$conn){
@@ -34,9 +38,11 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Stylesheet connection -->
         <link rel="stylesheet" href="userDashboard.css">
     </head>
     <body>
+        <!-- Sidebar -->
         <div class="wrapper">
             <aside id="sidebar">
                 <div class="d-flex">
@@ -62,11 +68,14 @@
                     <a href="logout.php" class="sidebar-link"><i class="lni lni-exit"></i><span>Logout</span></a>
                 </div>
             </aside>
+
+            <!-- Body -->
             <div class="main p-3" action="userDashboard.php" method="POST">
                 <div class="header">
                     <p>Management<p>
                     <h2>Report Surveillance</h2>
                 </div>
+                <!-- Creating the Kanban -->
                 <div class="content-wrapper kanban">
                   <div class="row">
                     <div class="col-sm-6 mx-auto">
@@ -75,8 +84,11 @@
                                 <h5 id="title" style="font-size: 32px;">New Report</h5>
                             </div>
                             <div class="kanban-item" style="margin-left: 30px; margin-right: 30px; padding-bottom: 15px;">
+
+                                <!-- Creating the Card Stack -->
                                 <div class="vstack gap-2">
                                     <?php
+                                            //Displaying reports with the status of 'new'
                                              if ($all_report->num_rows > 0) {
                                                 while ($row = $all_report->fetch_assoc()) {
                                                     $conn = new mysqli("localhost", "root", "", "mydb");
@@ -115,6 +127,7 @@
                                                 ?>
                                             </p>
                                             <div class="btn-group">
+                                                <!-- Updating the status of the report - directs to update_stat.php -->
                                                 <form action="update_stat.php" method="post">
                                                     <?php echo "<input type=hidden name=id value='".$row['reportFormNo']."'>" ?>
                                                     <button class="btn btn-primary" name="complete" value="completed">Mark as complete</button>
@@ -132,14 +145,19 @@
                             </div>
                         </div>
                     </div>
+
+                    <!--  In-Progress Kanban -->
                     <div class="col-sm-6 mx-auto">
                         <div class="kanban-group" style="background-color: antiquewhite; margin: 15px; height: 480px; overflow: scroll;">
                             <div class="kanban-head" style="margin: 30px;">
                                 <h5 id="title" style="font-size: 32px;">In-Progress</h5>
                             </div>
                             <div class="kanban-item" style="margin-left: 30px; margin-right: 30px; padding-bottom: 15px;">
+                                <!-- Creating the Card Stack -->
                                 <div class="vstack gap-2">
-                                    <?php   if ($all_report2 ->num_rows > 0) {
+                                    <?php   
+                                            //Displaying report with the status of 'inprogress'
+                                            if ($all_report2 ->num_rows > 0) {
                                                 while ($row = $all_report2->fetch_assoc()) {
                                                     $conn = new mysqli("localhost", "root", "", "mydb");
                                                     $sql = $conn->prepare("SELECT * from tasks WHERE taskNo = ?");
@@ -175,6 +193,7 @@
                                             <?php echo $row['content']; ?>
                                             </p>
                                             <div class="btn-group">
+                                                <!-- Updating the status of the report - directs to update_stat.php -->
                                                 <form action="update_stat.php" method="post">
                                                     <?php echo "<input type=hidden name=id value='".$row['reportFormNo']."'>" ?>
                                                     <button class="btn btn-primary" name="complete" value="completed">Mark as complete</button>

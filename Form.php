@@ -4,6 +4,7 @@
 ?>
 
 <?php
+    //if button is clicked for register, this will accept all user input
     if (isset($_POST['new_acc'])){
         $email = $_POST['email'];
         $userFirstName =  $_POST['userFirstName'];
@@ -11,7 +12,8 @@
         $userMInitial= mysqli_real_escape_string($conn, $_POST['userMInitial']);
         $userName = mysqli_real_escape_string($conn, $_POST['userName']);
         $password = mysqli_real_escape_string($conn, $_POST['password']);
-
+        
+        //if general user, it will inside the 'sampledatabase'
         if (isset($_POST['genAccount'])){
             $sql = "SELECT * from useraccount where userName='$userName'";
             $result = $conn->query($sql);
@@ -37,7 +39,8 @@
                 }
             }
         }
-
+        
+        //if the account is admin, the data will go into 'mydb'
         if (isset($_POST['adAccount'])){
             $conn = new mysqli("localhost", "root", "", "mydb");
             if (!$conn){
@@ -69,6 +72,7 @@
         }
     }
 
+    //for login and getting user information
     if (isset($_POST['access'])){
         $userName = mysqli_real_escape_string($conn, $_POST['userName']);
         $password = mysqli_real_escape_string($conn, $_POST['password']);
@@ -81,7 +85,7 @@
             if ($result->num_rows > 0){
                 $data = $result->fetch_assoc();
                 if ($data['userPass'] === $password){
-                        $_SESSION['id'] = $data['userId'];
+                        $_SESSION['id'] = $data['userId'];  //id to getuser details
                         header('Location: userDashboard.php');
                 }
             }
@@ -99,7 +103,7 @@
             if ($result->num_rows > 0){
                 $data = $result->fetch_assoc();
                 if ($data['adminPass'] === $password){
-                        $_SESSION['id'] = $data['adminId'];
+                        $_SESSION['id'] = $data['adminId']; //id to get admin details
                         header('Location: adminDashboard.php');
                 }
             }
@@ -139,9 +143,9 @@
                 <form action="Form.php" method="post">
                     <div id="login" class="input-group">
                         <div>
-                            <input type="radio" name="user" id="user">
+                            <input type="radio" name="genAccount" id="user">
                             <label for="user">General User</label>
-                            <input type="radio" name="user" id="admin">
+                            <input type="radio" name="adAccount" id="admin">
                             <label for="admin">Admin</label>
                         </div>
                         <input id="username" type="userN" class="form-control" name="userName" placeholder="Username">
@@ -155,9 +159,9 @@
                 <form action="Form.php" method="post">
                     <div id="register" class="input-group">
                         <div>
-                            <input type="radio" name="user" id="user">
+                            <input type="radio" name="genAccout" id="user">
                             <label for="user">General User</label>
-                            <input type="radio" name="user" id="admin">
+                            <input type="radio" name="adAccount" id="admin">
                             <label for="admin">Admin</label>
                         </div>
                         <input id="email" type="email" class="form-control" name="email" placeholder="Email">
